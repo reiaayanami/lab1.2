@@ -63,38 +63,6 @@ git-guide/
 └── assets/            # Папка для медіа-файлів (якщо потрібно)
 ```
 
-## 💻 Встановлення
-
-### Локально
-
-1. **Клонуйте репозиторій:**
-```bash
-git clone https://github.com/ВАШ-USERNAME/git-guide.git
-cd git-guide
-```
-
-2. **Відкрийте сторінку в браузері:**
-```bash
-# На Windows
-start index.html
-
-# На macOS
-open index.html
-
-# На Linux
-xdg-open index.html
-```
-
-Або скористайтеся локальним сервером:
-```bash
-# Python 3
-python -m http.server 8000
-
-# Node.js (http-server)
-npx http-server
-```
-
-Потім відкрийте `http://localhost:8000` у браузері.
 
 ## 🌐 Використання
 
@@ -107,32 +75,6 @@ npx http-server
 
 Просто відкрийте `index.html` у будь-якому сучасному браузері.
 
-## 🚀 GitHub Pages
-
-### Активування GitHub Pages:
-
-1. Перейдіть до **Settings** вашого репозиторію
-2. Прокрутіть до **Pages** (в лівому меню)
-3. У **Source** виберіть:
-   - Branch: `main` (або `master`)
-   - Folder: `/ (root)`
-4. Натисніть **Save**
-5. Ваша сторінка буде доступна за адресою:
-   - `https://ВАШ-USERNAME.github.io/git-guide/`
-
-### Налаштування користувацького домену (опціонально):
-
-1. Придбайте домен у реєстратора (наприклад, Namecheap, Google Domains)
-2. У **GitHub Pages** налаштуваннях введіть домен
-3. Налаштуйте DNS записи у реєстраторі домену
-4. Додайте CNAME файл у репозиторій:
-
-```bash
-echo "your-domain.com" > CNAME
-git add CNAME
-git commit -m "Add custom domain"
-git push
-```
 
 ## 📝 10 Команд Git
 
@@ -189,13 +131,7 @@ git push
 4. **Push** на гілку (`git push origin feature/amazing-feature`)
 5. Відкрийте **Pull Request**
 
-## 📞 Контакти
 
-- 📧 Email: [ваш-email@example.com]
-- 💬 Telegram: [@makoto699](https://t.me/makoto699)
-- 🐙 GitHub: [github.com/ваш-username](https://github.com)
-
----
 
 <div align="center">
 
