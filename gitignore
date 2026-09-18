@@ -1,0 +1,44 @@
+# IDE и редактори
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Операційна система
+Thumbs.db
+.DS_Store
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+
+# Лічні файли та налаштування
+config.local.js
+*.log
+.tmp/
+
+# Медіа файли (якщо великі)
+*.mp4
+*.avi
+*.mov
+*.zip
+
+# Сіммісфайлы (если используються)
+dist/
+build/
+out/

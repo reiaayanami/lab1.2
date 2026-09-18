@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git - Система Контролю Версій | Практичний Посібник</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #f34f29;
+            --secondary-color: #222;
+            --accent-color: #f1e5ce;
+            --light-bg: #f8f8f8;
+            --text-dark: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #fff;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1a1a1a 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(100px, -100px);
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav {
+            background-color: var(--light-bg);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid var(--primary-color);
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .git-info {
+            background-color: var(--light-bg);
+            padding: 2rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .git-info h3 {
+            margin-top: 0;
+        }
+
+        .advantages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .advantage-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .advantage-card h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .commands {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .command {
+            background-color: var(--secondary-color);
+            color: #4ade80;
+            padding: 1.5rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--primary-color);
+            overflow-x: auto;
+        }
+
+        .command-name {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-syntax {
+            color: #a3e635;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .command-description {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .certificate-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #f5e6d3 100%);
+            border-radius: 8px;
+            margin: 3rem 0;
+        }
+
+        .certificate {
+            background: white;
+            border: 3px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .certificate h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin: 1rem 0;
+        }
+
+        .certificate p {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .certificate .date {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .sources {
+            background-color: var(--light-bg);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .sources ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sources li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sources li:last-child {
+            border-bottom: none;
+        }
+
+        .sources a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .sources a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .toc {
+            background-color: var(--light-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            padding: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .certificate {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔀 Git</h1>
+        <p>Система контролю версій для вашого коду</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#vcs">Системи контролю</a></li>
+            <li><a href="#git-info">Про Git</a></li>
+            <li><a href="#advantages">Переваги</a></li>
+            <li><a href="#commands">10 команд</a></li>
+            <li><a href="#certificate">Сертифікат</a></li>
+            <li><a href="#sources">Джерела</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Системи контролю версій -->
+        <section id="vcs">
+            <h2>Системи Контролю Версій</h2>
+            
+            <div class="git-info">
+                <h3>Що таке система контролю версій?</h3>
+                <p>
+                    Система контролю версій (Version Control System, VCS) — це програмне забезпечення, 
+                    яке відслідковує та керує змінами в коді та інших файлах проекту. Вона дозволяє 
+                    розробникам:
+                </p>
+                <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                    <li>Зберігати історію всіх змін у проекті</li>
+                    <li>Повертатися до попередніх версій коду</li>
+                    <li>Працювати спільно з іншими розробниками</li>
+                    <li>Розуміти, хто зробив які зміни та коли</li>
+                    <li>Розгалужувати проект для експериментів</li>
+                </ul>
+            </div>
+
+            <h3>Типи систем контролю версій</h3>
+            <p><strong>Централізовані VCS (CVCS):</strong> Один центральний сервер зберігає всю історію (SVN, Mercurial)</p>
+            <p><strong>Розподілені VCS (DVCS):</strong> Кожен розробник має повну копію репозиторію (Git, Mercurial)</p>
+        </section>
+
+        <!-- Про Git -->
+        <section id="git-info">
+            <h2>Git — Розподілена Система Контролю Версій</h2>
+            
+            <div class="git-info">
+                <h3>Історія Git</h3>
+                <p>
+                    <strong>Git</strong> був створений в 2005 році <strong>Лінусом Торвальдсом</strong> 
+                    для управління проектом Linux kernel. Завдяки своїй простоті, швидкості та гнучкості, 
+                    Git став найпопулярнішою системою контролю версій в світі.
+                </p>
+            </div>
+
+            <h3>Основні характеристики Git:</h3>
+            <ul style="padding-left: 1.5rem; line-height: 2;">
+                <li><strong>Розподіленість:</strong> Кожен розробник має повну копію проекту</li>
+                <li><strong>Швидкість:</strong> Більшість операцій виконуються локально та миттєво</li>
+                <li><strong>Гнучкість:</strong> Підтримка різних рабочих процесів (workflow)</li>
+                <li><strong>Надійність:</strong> Контрольні суми та цілісність даних</li>
+                <li><strong>Безпека:</strong> Використання SHA-1 хешування</li>
+                <li><strong>Популярність:</strong> Інтеграція з GitHub, GitLab, Bitbucket</li>
+            </ul>
+        </section>
+
+        <!-- Переваги Git -->
+        <section id="advantages">
+            <h2>Основні Переваги Використання Git</h2>
+            
+            <div class="advantages">
+                <div class="advantage-card">
+                    <h4>📦 Локальна робота</h4>
+                    <p>Працюйте без інтернету. Всі операції виконуються на вашому комп'ютері з повною історією.</p>
+                </div>
+
+                <div class="advantage-card">
+                    <h4>🚀 Висока швидкість</h4>
+                    <p>Git операції надзвичайно швидкі навіть для великих проектів завдяки локальному зберіганню.</p>
+                </div>
+
+                <div class="advantage-card">
+                    <h4>👥 Командна робота</h4>
+                    <p>Легко colabor з іншими розробниками без конфліктів завдяки гнучкому merge механізму.</p>
+                </div>
+
+                <div class="advantage-card">
+                    <h4>🌿 Гілки (Branches)</h4>
+                    <p>Створюйте ізольовані гілки для нових функцій без впливу на основний код.</p>
+                </div>
+
+                <div class="advantage-card">
+                    <h4>⏮️ Повна історія</h4>
+                    <p>Повна історія проекту дозволяє відстежити еволюцію коду та повернутися до будь-якої версії.</p>
+                </div>
+
+                <div class="advantage-card">
+                    <h4>🔍 Детальне відстеження</h4>
+                    <p>Бачте, хто змінив що, коли і чому завдяки детальним повідомленням commit.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 Базових Команд -->
+        <section id="commands">
+            <h2>10 Базових Команд Git</h2>
+            
+            <div class="commands">
+                <div class="command">
+                    <div class="command-name">1. git init</div>
+                    <span class="command-syntax">$ git init</span>
+                    <span class="command-description">Ініціалізує новий репозиторій Git у поточній папці. Створює прихову папку .git</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">2. git clone</div>
+                    <span class="command-syntax">$ git clone &lt;url-репозиторію&gt;</span>
+                    <span class="command-description">Копіює (клонує) існуючий репозиторій з сервера на ваш локальний комп'ютер</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">3. git add</div>
+                    <span class="command-syntax">$ git add &lt;назва-файлу&gt; або $ git add .</span>
+                    <span class="command-description">Додає файли до staging area (індекс) для підготовки до commit. "." додає всі змінені файли</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">4. git commit</div>
+                    <span class="command-syntax">$ git commit -m "Опис змін"</span>
+                    <span class="command-description">Збергає snapshot поточного стану проекту з повідомленням про внесені зміни в локальний репозиторій</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">5. git push</div>
+                    <span class="command-syntax">$ git push origin &lt;назва-гілки&gt;</span>
+                    <span class="command-description">Завантажує ваші локальні commit на віддалений сервер (GitHub, GitLab тощо)</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">6. git pull</div>
+                    <span class="command-syntax">$ git pull origin &lt;назва-гілки&gt;</span>
+                    <span class="command-description">Завантажує последні зміни з віддаленого репозиторію та об'єднує їх з вашою локальною гілкою</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">7. git branch</div>
+                    <span class="command-syntax">$ git branch або $ git branch &lt;назва-нової-гілки&gt;</span>
+                    <span class="command-description">Показує список всіх локальних гілок або створює нову гілку для розробки нової функції</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">8. git checkout</div>
+                    <span class="command-syntax">$ git checkout &lt;назва-гілки&gt;</span>
+                    <span class="command-description">Переключається на іншу гілку або версію коду. Часто комбінується: git checkout -b для створення та переходу</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">9. git merge</div>
+                    <span class="command-syntax">$ git merge &lt;назва-гілки&gt;</span>
+                    <span class="command-description">Об'єднує зміни з іншої гілки в поточну гілку. Використовується для завершення розробки функції</span>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">10. git status</div>
+                    <span class="command-syntax">$ git status</span>
+                    <span class="command-description">Показує поточний стан робочої директорії: модифіковані файли, файли в staging area та нові файли</span>
+                </div>
+            </div>
+
+            <div class="git-info" style="margin-top: 2rem;">
+                <h4>💡 Корисні порадки</h4>
+                <p><strong>git log</strong> - переглянути історію commit</p>
+                <p><strong>git diff</strong> - порівняти зміни між версіями</p>
+                <p><strong>git reset</strong> - відмінити останні зміни</p>
+                <p><strong>git tag</strong> - позначити важливі версії проекту</p>
+            </div>
+        </section>
+
+        <!-- Сертифікат -->
+        <section id="certificate">
+            <div class="certificate-section">
+                <h2>🎓 Сертифікат Курсу Git</h2>
+                
+                <div class="certificate">
+                    <h3>Сертифікат про завершення</h3>
+                    <p style="font-size: 1.3rem; color: var(--primary-color);">Курс "Практичний Git"</p>
+                    
+                    <p>Цей документ засвідчує, що особа успішно завершила навчання з основ системи контролю версій Git,</p>
+                    <p>включаючи роботу з репозиторіями, гілками, commit та комунікацію з віддаленими сервісами.</p>
+                    
+                    <p style="margin-top: 2rem; font-style: italic;">Дата видачі: <span class="date" id="cert-date"></span></p>
+                    
+                    <p style="margin-top: 2rem; color: var(--secondary-color);">
+                        Умовно видано за активне навчання та практичне застосування навичок Git
+                    </p>
+                </div>
+
+                <p style="margin-top: 2rem; color: var(--secondary-color);">
+                    Поздоровляємо з успішним завершенням курсу! 🎉
+                </p>
+            </div>
+        </section>
+
+        <!-- Джерела інформації -->
+        <section id="sources">
+            <h2>Джерела Інформації</h2>
+            
+            <div class="sources">
+                <ul>
+                    <li>
+                        <strong>Офіційна документація Git:</strong> 
+                        <a href="https://git-scm.com/doc" target="_blank">https://git-scm.com/doc</a>
+                    </li>
+                    <li>
+                        <strong>Git Book (укр. переклад):</strong> 
+                        <a href="https://git-scm.com/book/uk/v2" target="_blank">https://git-scm.com/book/uk/v2</a>
+                    </li>
+                    <li>
+                        <strong>GitHub Learning Lab:</strong> 
+                        <a href="https://github.com/skills" target="_blank">https://github.com/skills</a>
+                    </li>
+                    <li>
+                        <strong>Atlassian Git Tutorials:</strong> 
+                        <a href="https://www.atlassian.com/git/tutorials" target="_blank">https://www.atlassian.com/git/tutorials</a>
+                    </li>
+                    <li>
+                        <strong>Interactive Git Tutorial:</strong> 
+                        <a href="https://learngitbranching.js.org/" target="_blank">https://learngitbranching.js.org/</a>
+                    </li>
+                    <li>
+                        <strong>GitHub Guides:</strong> 
+                        <a href="https://guides.github.com/" target="_blank">https://guides.github.com/</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Посібник з Git | Практичне навчання системи контролю версій</p>
+        <p>Розроблено як освітній матеріал | <a href="https://github.com" target="_blank" style="color: var(--primary-color);">GitHub</a></p>
+    </footer>
+
+    <script>
+        // Встановлення дати на сертифікаті
+        document.getElementById('cert-date').textContent = new Date().toLocaleDateString('uk-UA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Плавна навігація
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
