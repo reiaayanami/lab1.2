@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIT MASTER | Система Контролю Версій</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #ff006e;
+            --accent: #00d9ff;
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(20, 28, 50, 0.5);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d4;
+            --gradient-1: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+            --gradient-2: linear-gradient(135deg, #ff006e 0%, #00d9ff 100%);
+            --gradient-3: linear-gradient(135deg, #00ff88 0%, #ff006e 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e27;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 0%, rgba(255, 0, 110, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.8);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 80px;
+            position: relative;
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SECTION ===== */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-text h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .about-text ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .about-text li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .about-text li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .about-visual {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(0, 255, 136, 0.1) 90deg,
+                transparent 180deg
+            );
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .about-visual h2 {
+            font-size: 2.5rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* ===== ADVANTAGES ===== */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .advantage-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .advantage-card:hover::before {
+            opacity: 1;
+        }
+
+        .advantage-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-5px);
+            background: rgba(20, 28, 50, 0.8);
+        }
+
+        .advantage-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .advantage-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .advantage-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ===== COMMANDS ===== */
+        .commands-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-top: 3rem;
+        }
+
+        .command-card {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .command-card:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+            background: rgba(10, 14, 39, 0.8);
+            transform: translateX(5px);
+        }
+
+        .command-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .command-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .command-syntax {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--primary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #4ade80;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            font-size: 0.95rem;
+        }
+
+        .command-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ===== CERTIFICATE ===== */
+        .certificate-section {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .certificate {
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 16px;
+            padding: 3.5rem;
+            max-width: 700px;
+            margin: 2rem auto;
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(0, 255, 136, 0.1) 90deg,
+                transparent 180deg
+            );
+            animation: rotateBg 30s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .certificate h3 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .certificate-title {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .certificate-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .certificate-date {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* ===== SOURCES ===== */
+        .sources-section {
+            margin-top: 3rem;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .source-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .source-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .source-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .source-card:hover::before {
+            opacity: 1;
+        }
+
+        .source-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .source-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .source-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .source-card a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .source-card a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            padding: 3rem 0;
+            margin-top: 6rem;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            header {
+                height: 70px;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .commands-section {
+                padding: 2rem;
+            }
+
+            .certificate {
+                padding: 2rem;
+            }
+
+            .certificate h3 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">⚡ GIT MASTER</div>
+                <nav>
+                    <a href="#about">Про Git</a>
+                    <a href="#advantages">Переваги</a>
+                    <a href="#commands">10 Команд</a>
+                    <a href="#certificate">Сертифікат</a>
+                    <a href="#sources">Джерела</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>GIT MASTER</h1>
+                <p>Система контролю версій, яка змінює гру розробки</p>
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">Розпочати</a>
+                    <a href="#sources" class="btn btn-secondary">Дізнатися більше</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Про Git</h2>
+            <p class="section-subtitle">Розумієш, що таке контроль версій?</p>
+
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Що таке система контролю версій?</h3>
+                    <p>Система контролю версій (VCS) — це інструмент, який відслідковує всі зміни в коді. Git був створений Лінусом Торвальдсом у 2005 році для управління ядром Linux.</p>
+
+                    <h3>Чому Git настільки потужний?</h3>
+                    <ul>
+                        <li>Розподілена архітектура - кожен має повну копію</li>
+                        <li>Блискавична швидкість навіть на великих проектах</li>
+                        <li>Невеликий набір команд, але дуже гнучкі</li>
+                        <li>Стабільність завдяки SHA-1 хешуванню</li>
+                        <li>Інтеграція з GitHub, GitLab, Bitbucket</li>
+                        <li>Індустріальний стандарт для розробки</li>
+                    </ul>
+                </div>
+
+                <div class="about-visual">
+                    <h2>🔀 Version Control</h2>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">Керуй своїм кодом з повною впевненістю</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADVANTAGES -->
+    <section id="advantages">
+        <div class="container">
+            <h2 class="section-title">Переваги Git</h2>
+            <p class="section-subtitle">Чому розробники вибирають Git</p>
+
+            <div class="advantages-grid">
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">📦</div>
+                    <h3>Локальна робота</h3>
+                    <p>Працюй без інтернету. Усі операції виконуються локально з повною історією змін.</p>
+                </div>
+
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">⚡</div>
+                    <h3>Надзвичайна швидкість</h3>
+                    <p>Git операції надзвичайно швидкі навіть на велику проектах завдяки локальному сховищу.</p>
+                </div>
+
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">👥</div>
+                    <h3>Командна робота</h3>
+                    <p>Легко колаборуй з тисячами розробників без конфліктів і затримок.</p>
+                </div>
+
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">🌿</div>
+                    <h3>Розгалуження (Branching)</h3>
+                    <p>Створюй ізольовані гілки для експериментів без впливу на основний код.</p>
+                </div>
+
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">⏮️</div>
+                    <h3>Повна історія</h3>
+                    <p>Повна історія проекту дозволяє відстежити еволюцію та повернутися до будь-якої версії.</p>
+                </div>
+
+                <div class="advantage-card scroll-animate">
+                    <div class="advantage-icon">🔍</div>
+                    <h3>Прозорість</h3>
+                    <p>Бачь точно, хто змінив що, коли і чому завдяки детальним commit повідомленням.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMMANDS -->
+    <section id="commands">
+        <div class="container">
+            <h2 class="section-title">10 Базових Команд</h2>
+            <p class="section-subtitle">Командний арсенал розробника</p>
+
+            <div class="commands-section scroll-animate">
+                <!-- 1 -->
+                <div class="command-card">
+                    <div class="command-number">1</div>
+                    <div class="command-name">git init</div>
+                    <div class="command-syntax">$ git init</div>
+                    <div class="command-description">Ініціалізує новий репозиторій Git у поточній папці. Створює приховану папку .git з усією необхідною структурою.</div>
+                </div>
+
+                <!-- 2 -->
+                <div class="command-card">
+                    <div class="command-number">2</div>
+                    <div class="command-name">git clone</div>
+                    <div class="command-syntax">$ git clone &lt;url&gt;</div>
+                    <div class="command-description">Копіює (клонує) існуючий репозиторій з сервера на ваш комп'ютер. Отримуєте повну історію проекту.</div>
+                </div>
+
+                <!-- 3 -->
+                <div class="command-card">
+                    <div class="command-number">3</div>
+                    <div class="command-name">git add</div>
+                    <div class="command-syntax">$ git add . або git add &lt;file&gt;</div>
+                    <div class="command-description">Додає файли до staging area (індекс) для підготовки до commit. "." додає всі змінені файли одразу.</div>
+                </div>
+
+                <!-- 4 -->
+                <div class="command-card">
+                    <div class="command-number">4</div>
+                    <div class="command-name">git commit</div>
+                    <div class="command-syntax">$ git commit -m "Your message"</div>
+                    <div class="command-description">Зберігає snapshot поточного стану проекту з описом змін. Створює точку в історії, до якої можна повернутися.</div>
+                </div>
+
+                <!-- 5 -->
+                <div class="command-card">
+                    <div class="command-number">5</div>
+                    <div class="command-name">git push</div>
+                    <div class="command-syntax">$ git push origin &lt;branch&gt;</div>
+                    <div class="command-description">Завантажує ваші локальні commits на віддалений сервер (GitHub, GitLab тощо). Діли свою роботу з командою.</div>
+                </div>
+
+                <!-- 6 -->
+                <div class="command-card">
+                    <div class="command-number">6</div>
+                    <div class="command-name">git pull</div>
+                    <div class="command-syntax">$ git pull origin &lt;branch&gt;</div>
+                    <div class="command-description">Завантажує останні зміни з віддаленого репозиторію та об'єднує їх з вашою локальною гілкою. Тримай свій код в синхронізації.</div>
+                </div>
+
+                <!-- 7 -->
+                <div class="command-card">
+                    <div class="command-number">7</div>
+                    <div class="command-name">git branch</div>
+                    <div class="command-syntax">$ git branch або git branch &lt;name&gt;</div>
+                    <div class="command-description">Показує список всіх локальних гілок або створює нову гілку. Ідеально для розробки нових функцій ізольовано.</div>
+                </div>
+
+                <!-- 8 -->
+                <div class="command-card">
+                    <div class="command-number">8</div>
+                    <div class="command-name">git checkout</div>
+                    <div class="command-syntax">$ git checkout &lt;branch&gt;</div>
+                    <div class="command-description">Переключається на іншу гілку або версію коду. Комбіні git checkout -b для створення та переходу на нову гілку.</div>
+                </div>
+
+                <!-- 9 -->
+                <div class="command-card">
+                    <div class="command-number">9</div>
+                    <div class="command-name">git merge</div>
+                    <div class="command-syntax">$ git merge &lt;branch&gt;</div>
+                    <div class="command-description">Об'єднує зміни з іншої гілки в поточну. Використовується для завершення розробки функції та інтеграції коду.</div>
+                </div>
+
+                <!-- 10 -->
+                <div class="command-card">
+                    <div class="command-number">10</div>
+                    <div class="command-name">git status</div>
+                    <div class="command-syntax">$ git status</div>
+                    <div class="command-description">Показує поточний стан робочої директорії: модифіковані файли, файли в staging area та нові файли. Твій best friend!</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CERTIFICATE -->
+    <section id="certificate">
+        <div class="container">
+            <h2 class="section-title">Твій Сертифікат</h2>
+            <p class="section-subtitle">Підтверди своє знання Git</p>
+
+            <div class="certificate-section scroll-animate">
+                <div class="certificate">
+                    <div class="certificate-content">
+                        <h3>🎓 СЕРТИФІКАТ</h3>
+                        <div class="certificate-title">Майстер Git</div>
+                        <p class="certificate-text">Цей документ засвідчує, що ти успішно завершив(а) навчання з основ системи контролю версій Git</p>
+                        <p class="certificate-text">Ти опановував 10 базових команд і розумієш, як працює розподілена система контролю версій</p>
+                        <p class="certificate-text">Дата видачі: <span class="certificate-date" id="cert-date"></span></p>
+                        <p class="certificate-text" style="margin-top: 1.5rem; font-style: italic;">Готуй себе до більш складних завдань 🚀</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOURCES -->
+    <section id="sources">
+        <div class="container">
+            <h2 class="section-title">Джерела Інформації</h2>
+            <p class="section-subtitle">Де вчитися далі</p>
+
+            <div class="sources-grid">
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">📖</div>
+                    <h4>Git Book</h4>
+                    <p>Офіційна книга про Git на українській мові. Все що тобі потрібно знати про версійний контроль.</p>
+                    <a href="https://git-scm.com/book/uk/v2" target="_blank">Читати →</a>
+                </div>
+
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">🎓</div>
+                    <h4>GitHub Learning Lab</h4>
+                    <p>Інтерактивні уроки прямо на GitHub. Практикуйся на реальних проектах з автоматичною перевіркою.</p>
+                    <a href="https://github.com/skills" target="_blank">Розпочати →</a>
+                </div>
+
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">🎮</div>
+                    <h4>Learn Git Branching</h4>
+                    <p>Гама для вивчення Git гілок. Інтерактивна, веселі й дуже навчальна. Незабутні мнемоніка!</p>
+                    <a href="https://learngitbranching.js.org/" target="_blank">Грати →</a>
+                </div>
+
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">📚</div>
+                    <h4>Atlassian Git</h4>
+                    <p>Детальні уроки від Atlassian. От базових команд до складних workflow стратегій.</p>
+                    <a href="https://www.atlassian.com/git/tutorials" target="_blank">Дізнатися →</a>
+                </div>
+
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">🔗</div>
+                    <h4>Git Документація</h4>
+                    <p>Офіційна документація Git. Повна довідка всіх команд й опцій. Твоя святиня при потребі.</p>
+                    <a href="https://git-scm.com/doc" target="_blank">Перейти →</a>
+                </div>
+
+                <div class="source-card scroll-animate">
+                    <div class="source-icon">🌟</div>
+                    <h4>GitHub Guides</h4>
+                    <p>Офіційні гайди GitHub. Best practices для роботи з репозиторіями й командною розробкою.</p>
+                    <a href="https://guides.github.com/" target="_blank">Дослідити →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Git Master | Практичний посібник по системі контролю версій</p>
+            <p>Розроблено з 💚 для розробників | <a href="https://github.com">GitHub</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Сертифікат дата
+        document.getElementById('cert-date').textContent = new Date().toLocaleDateString('uk-UA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
